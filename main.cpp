@@ -196,7 +196,8 @@ void deleterow(int **m, int k, int row, int col){
     else if(fullflag){
         deleterow(m, k+1, row, col);
         for(int r=k;r<=row+2;r++)
-            m[r]=m[r+1];
+            for(int c=0;c<col;c++)
+                m[r][c]=m[r+1][c];
         for(int c=0;c<col;c++)
             m[row+3][c]=0;
     }
