@@ -78,7 +78,7 @@ void check(int **m, string block, int b, int r, int &k){
 
     else if(block=="L4"){
         if(r==0 || m[r-1][b]==1 || m[r-1][b+1]==1 || m[r-1][b+2]==1 ){
-            m[r][b]=1; m[r][b+1]=1; m[r][b+1]=1; m[r+1][b+1]=1;
+            m[r][b]=1; m[r][b+1]=1; m[r][b+2]=1; m[r+1][b+2]=1;
             k=r;
         }
         else
@@ -197,9 +197,11 @@ void deleterow(int **m, int k, int row, int col){
         deleterow(m, k+1, row, col);
         for(int r=k;r<=row+2;r++)
             m[r]=m[r+1];
-        m[row+3]={0};
+        for(int c=0;c<col;c++)
+            m[row+3][c]=0;
     }
-    else{deleterow(m, k+1, row, col);}
+    else
+        deleterow(m, k+1, row, col);
 }
 
 void determine(int **m, int row, int col, bool &exitflag){
@@ -243,8 +245,6 @@ int main(){
             if(exitflag){end(matrix,row,col);break;}
         }
     }
-
-
 
     return 0;
 }
