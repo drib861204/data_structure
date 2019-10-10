@@ -4,11 +4,12 @@
 #include <sstream>
 using namespace std;
 
-void end(int **m,int r,int c){
-    for(int i=0;i<r;i++){
+void end(int **m,int r,int c, ofstream &fout){
+    fout.open("Tetris.output");
+    for(int i=r-1;i>=0;i--){
         for(int j=0;j<c;j++)
-            cout << m[i][j];
-        cout << endl;
+            fout << m[i][j];
+        fout << endl;
     }
 }
 
@@ -214,6 +215,7 @@ void determine(int **m, int row, int col, bool &exitflag){
 
 int main(){
     ifstream fin;
+    ofstream fout;
     string fname;
     string lines;
     string block;
@@ -221,11 +223,12 @@ int main(){
     int **matrix;
     bool exitflag=false;
 
+    cout << "file name:\n";
     getline(cin, fname);
     fin.open(fname);
     while(fin){
         getline(fin,lines);
-        if(lines=="End"){end(matrix,row,col);break;}
+        if(lines=="End"){end(matrix,row,col,fout);break;}
         else if(isdigit(lines[0])){
             stringstream(lines) >> row >> col;
             matrix = new int*[row+4];
@@ -240,10 +243,10 @@ int main(){
         else{
             stringstream(lines) >> block >> base;
             check(matrix, block, base-1, row, k);
-            if(k==row){end(matrix,row,col);break;}
+            if(k==row){end(matrix,row,col,fout);break;}
             deleterow(matrix, k, row, col);
             determine(matrix, row, col, exitflag);
-            if(exitflag){end(matrix,row,col);break;}
+            if(exitflag){end(matrix,row,col,fout);break;}
         }
     }
 
