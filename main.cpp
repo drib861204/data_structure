@@ -11,6 +11,11 @@ void end(int **m,int r,int c, ofstream &fout){
             fout << m[i][j];
         fout << endl;
     }
+    for(int i=r+3;i>=0;i--){//
+        for(int j=0;j<c;j++)
+            cout << m[i][j];
+        cout << endl;
+    }//
 }
 
 void check(int **m, string block, int b, int r, int &k){
@@ -189,6 +194,10 @@ void check(int **m, string block, int b, int r, int &k){
 void deleterow(int **m, int k, int row, int col){
     bool fullflag=true;
     bool emptyflag=true;
+
+    if(k==row){}
+    else{
+
     for(int i=0;i<col;i++){
         if(m[k][i]==0){fullflag=false;}
         else{emptyflag=false;}
@@ -204,6 +213,7 @@ void deleterow(int **m, int k, int row, int col){
     }
     else
         deleterow(m, k+1, row, col);
+    }
 }
 
 void determine(int **m, int row, int col, bool &exitflag){
