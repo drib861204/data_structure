@@ -5,17 +5,12 @@
 using namespace std;
 
 void end(int **m,int r,int c, ofstream &fout){
-    fout.open("Tetris.output");
+    fout.open("Tetris.final");
     for(int i=r-1;i>=0;i--){
         for(int j=0;j<c;j++)
             fout << m[i][j];
         fout << endl;
     }
-    for(int i=r+3;i>=0;i--){//
-        for(int j=0;j<c;j++)
-            cout << m[i][j];
-        cout << endl;
-    }//
 }
 
 void check(int **m, string block, int b, int r, int &k){
@@ -191,28 +186,28 @@ void check(int **m, string block, int b, int r, int &k){
     }
 }
 
-void deleterow(int **m, int k, int row, int col){
+void deleterow(int **m, int k, int row, int col, int &count){
     bool fullflag=true;
     bool emptyflag=true;
 
-    if(k==row){}
+    if(k==row && count==0){}
     else{
-
-    for(int i=0;i<col;i++){
-        if(m[k][i]==0){fullflag=false;}
-        else{emptyflag=false;}
-    }
-    if(emptyflag){}
-    else if(fullflag){
-        deleterow(m, k+1, row, col);
-        for(int r=k;r<=row+2;r++)
+        for(int i=0;i<col;i++){
+            if(m[k][i]==0){fullflag=false;}
+            else{emptyflag=false;}
+        }
+        if(emptyflag){}
+        else if(fullflag){
+            count++;
+            deleterow(m, k+1, row, col, count);
+            for(int r=k;r<=row+2;r++)
+                for(int c=0;c<col;c++)
+                    m[r][c]=m[r+1][c];
             for(int c=0;c<col;c++)
-                m[r][c]=m[r+1][c];
-        for(int c=0;c<col;c++)
-            m[row+3][c]=0;
-    }
-    else
-        deleterow(m, k+1, row, col);
+                m[row+3][c]=0;
+        }
+        else
+            deleterow(m, k+1, row, col, count);
     }
 }
 
@@ -232,6 +227,8 @@ int main(){
     int row, col, base, k=0;
     int **matrix;
     bool exitflag=false;
+
+    int delete_count=0;
 
     cout << "file name:\n";
     getline(cin, fname);
@@ -253,8 +250,8 @@ int main(){
         else{
             stringstream(lines) >> block >> base;
             check(matrix, block, base-1, row, k);
-            if(k==row){end(matrix,row,col,fout);break;}
-            deleterow(matrix, k, row, col);
+            if(k==row){end(matrix,row,col,fout);break;}delete_count=0;
+            deleterow(matrix, k, row, col, delete_count);
             determine(matrix, row, col, exitflag);
             if(exitflag){end(matrix,row,col,fout);break;}
         }
